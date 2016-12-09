@@ -19,9 +19,12 @@ public class Player : MonoBehaviour, Character {
     public bool jumpAble = false;
     
     
-    
+    //Player Item
     //Equipment currentEquipment;
+    //Equipment[] equipList;
+    //int currentIndex = 0;
 
+    
 
 	// Use this for initialization
 	void Start () {
@@ -53,11 +56,14 @@ public class Player : MonoBehaviour, Character {
     
     public void Attack()
     {
-        
+        //장비 호출해서 공격
+        //currentWeapon.Attack();
     }
 
     public void SwapWeapon()
     {
+        //장비를 다음 것으로 전환
+        //index를 1추가하여 다음것과 교체
         
     }
 
