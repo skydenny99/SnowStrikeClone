@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, Character {
     //Vertical movement
     public float jumpPower;
     public bool jumpAble = false;
-
+    
     
     
     //Equipment currentEquipment;
@@ -31,6 +31,7 @@ public class Player : MonoBehaviour, Character {
 	// Update is called once per frame
 	void Update () {
         Move();
+ 
 	}
 
     public void Move()
@@ -47,15 +48,9 @@ public class Player : MonoBehaviour, Character {
         if(Input.GetKeyDown(KeyCode.UpArrow) && jumpAble)
         {
             _rig.velocity = new Vector2(_rig.velocity.x, jumpPower);
-            //jumpAble = false;
         }
     }
-
-    public bool isGrounded()
-    {
-        return false;
-    }
-
+    
     public void Attack()
     {
         
@@ -64,5 +59,10 @@ public class Player : MonoBehaviour, Character {
     public void SwapWeapon()
     {
         
+    }
+
+    public void isGrounded(bool grounded)
+    {
+        jumpAble = grounded;
     }
 }
