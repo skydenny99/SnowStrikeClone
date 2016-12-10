@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    /*
+     * 구현되어야 하는 기능
+     * 
+     * 몬스터 매니저
+     * 아이템 매니저
+     * 게임 종료
+     * 
+     */
+
 	// Use this for initialization
 	void Start () {
 		

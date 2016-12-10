@@ -5,10 +5,31 @@ using UnityEngine;
 
 public abstract class Equipment : MonoBehaviour, Ownable {
     protected int level = 1;
+    public EquipmentType equipType = EquipmentType.None;
+
+    public enum EquipmentType {
+        None,
+        MeleeWeapon,
+        RangedWeapon,
+        AerialWeapon
+    };
 
     public Equipment()
     {
-        level = 1;
+    }
+
+    public abstract float getRange();
+
+    public abstract float getDamage();
+
+    public abstract bool isExplosive();
+
+
+
+
+    public virtual EquipmentType getType()
+    {
+        return equipType;
     }
 
     public virtual string getName()

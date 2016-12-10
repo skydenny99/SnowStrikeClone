@@ -166,8 +166,7 @@ public class Player : MonoBehaviour, Character {
                     break;
                 }
             }
-
-
+            
             Destroy(collision.gameObject);
 
 
