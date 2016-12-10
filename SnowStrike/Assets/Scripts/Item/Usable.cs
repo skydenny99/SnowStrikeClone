@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Item {
-    string getName();
+public interface Usable : Item {
+    // 사용 성공시 true
+    bool use();
 }

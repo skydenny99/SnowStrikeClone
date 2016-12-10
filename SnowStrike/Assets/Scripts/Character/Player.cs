@@ -22,9 +22,10 @@ public class Player : MonoBehaviour, Character {
     //Vertical movement
     public float jumpPower;
     public bool jumpAble = false;
-
-
+    
     //Player Item
+    private List<Equipment> equipmentList = new List<Equipment>();
+    
     //Equipment currentEquipment;
     //Equipment[] equipList;
     int currentIndex = 0;
@@ -33,15 +34,15 @@ public class Player : MonoBehaviour, Character {
     private Animator _anim;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         _rig = transform.GetComponent<Rigidbody2D>();
         _anim = transform.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Move();
+        MoveWithoutForce();
 
         if (Input.GetKeyDown(KeyCode.Z))
             Attack();
@@ -51,6 +52,21 @@ public class Player : MonoBehaviour, Character {
  
 	}
 
+    public void MoveWithoutForce()
+    {
+        float axis = Input.GetAxis("Horizontal");
+        Vector2 v = new Vector2(axis * acceleration * Time.deltaTime, 0);
+
+        _rig.transform.Translate(v);
+        _anim.SetFloat("Speed", Mathf.Abs(axis));
+
+        if (Input.GetKeyDown(KeyCode.UpArrow) && jumpAble)
+        {
+            _rig.velocity = new Vector2(_rig.velocity.x, jumpPower);
+            _anim.SetTrigger("Jump");
+        }
+    }
+
     public void Move()
     {
         float axis = Input.GetAxis("Horizontal");
@@ -58,10 +74,10 @@ public class Player : MonoBehaviour, Character {
         _rig.AddForce(v);
 
         float temp = Mathf.Clamp(_rig.velocity.x, -maxSpeed, maxSpeed);
-        if(Mathf.Abs(axis) < 0.8)
+        if (Mathf.Abs(axis) < 0.8)
             temp = Mathf.SmoothDamp(temp, 0, ref _vx, toZero);
         _rig.velocity = new Vector2(temp, _rig.velocity.y);
-
+        
         _anim.SetFloat("Speed", Mathf.Abs(axis));
 
         if(Input.GetKeyDown(KeyCode.UpArrow) && jumpAble)
@@ -70,7 +86,12 @@ public class Player : MonoBehaviour, Character {
             _anim.SetTrigger("Jump");
         }
     }
-    
+
+    public bool isGrounded()
+    {
+        return false;
+    }
+
     public void Attack()
     {
         //장비 호출해서 공격
@@ -92,7 +113,7 @@ public class Player : MonoBehaviour, Character {
         _anim.ResetTrigger("Jump");
         _anim.SetBool("IsGrounded", grounded);
     }
-
+    
     public void Damaged(int amount)
     {
         HP -= amount;
@@ -114,7 +135,7 @@ public class Player : MonoBehaviour, Character {
 
         }
     }
-
+    
     //animation event function
     //this function should be called end of every attack motion
     public void resetAttack()
@@ -129,4 +150,46 @@ public class Player : MonoBehaviour, Character {
     }
 
     
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Item"))
+        {
+            Equipment item = collision.gameObject.GetComponent<Equipment>();
+            if (item == null)
+                return;
+            
+            foreach(Equipment eq in equipmentList)
+            {
+                if(eq.getName().Equals( item.name ))
+                {
+                    eq.addlevel(1);
+                    break;
+                }
+            }
+
+
+            Destroy(collision.gameObject);
+
+
+            /*
+            Item item = collision.gameObject.GetComponent<Item>();
+            Debug.Assert(item != null);
+            
+            if (item is Ownable)
+            {
+
+                (item as Ownable).own();
+                // add to inventory;
+                // own code;
+            }
+            else if (item is Usable) 
+            {
+                // 가질 수 없다면 바로 써버린다
+                (item as Usable).use();
+                // use code;
+            }
+
+            Destroy(collision.gameObject);*/
+        }
+    }
 }
