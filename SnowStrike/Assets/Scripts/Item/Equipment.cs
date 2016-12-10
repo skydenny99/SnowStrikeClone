@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Equipment : MonoBehaviour, Ownable {
+public class Equipment : MonoBehaviour, Item {
     public enum EquipmentType {
         None,
         MeleeWeapon,
@@ -11,25 +11,26 @@ public abstract class Equipment : MonoBehaviour, Ownable {
         AerialWeapon
     };
 
+    public EquipmentType equipmentType = EquipmentType.None;
+    public int level = 1;
+    public float range = 1;
+    public float rangeInc = 0;
+    public float damage = 1;
+    public float damageInc = 0;
+    public int itemcode = 0;
+    public string itemname = "";
+
     public Equipment()
     {
     }
 
-    public abstract float getRange();
-
-    public abstract float getDamage();
-
-    public abstract bool isExplosive();
-
-    public abstract string getName();
-    
-    public abstract EquipmentType getType();
-
-    public abstract int getLevel();
-    public abstract void setLevel(int level);
-    /*
-    public virtual bool attack(int attackType)
+    public string getName()
     {
-        return false;
-    }*/
+        return itemname;
+    }
+
+    public int getItemCode()
+    {
+        return itemcode;
+    }
 }

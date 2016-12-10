@@ -160,9 +160,9 @@ public class Player : MonoBehaviour, Character {
             
             foreach(Equipment eq in equipmentList)
             {
-                if(eq.getName().Equals( item.name ))
+                if(eq.itemcode == item.itemcode)
                 {
-                    eq.addlevel(1);
+                    eq.level++;
                     break;
                 }
             }
