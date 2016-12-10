@@ -12,6 +12,14 @@ public class Player : MonoBehaviour, Character {
     public int cold;
     public int freezing;
     public int freeze2death;
+    
+
+    //Torch
+    public int level = 1;
+    public int duration = 10;
+    private float torchTimer;
+    private Light torchLight;
+    private int intensity = 2;
 
     //Horizontal movement
     public float acceleration;
@@ -44,23 +52,26 @@ public class Player : MonoBehaviour, Character {
         _rig = transform.GetComponent<Rigidbody2D>();
         _anim = transform.GetComponent<Animator>();
         _oriAcc = acceleration;
+        torchLight = transform.FindChild("Torch").GetComponent<Light>();
         //equipmentList.Add()
         currentEquipment = equipmentList[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        torchTimer += Time.deltaTime;
         MoveWithoutForce();
 
         if (Input.GetKeyDown(KeyCode.Z))
-            Attack();
+            _anim.SetTrigger("Attack");
 
         if (Input.GetKeyDown(KeyCode.X))
             SwapWeapon();
 
         if (HP <= 0)
             Death();
- 
+
+        TorchFliker();
 	}
 
     public void MoveWithoutForce()
@@ -124,7 +135,6 @@ public class Player : MonoBehaviour, Character {
     {
         //장비 호출해서 공격
         //currentWeapon.Attack();
-        _anim.SetTrigger("Attack");
     }
 
     public void SwapWeapon()
@@ -142,6 +152,7 @@ public class Player : MonoBehaviour, Character {
             currentIndex++;
         _anim.SetInteger("Index", currentIndex);
         _anim.SetTrigger("Swap");
+//        _anim.SetFloat("Attack Speed", currentEquipment.);
     }
 
     public void IsGrounded(bool grounded)
@@ -149,6 +160,11 @@ public class Player : MonoBehaviour, Character {
         jumpAble = grounded;
         _anim.ResetTrigger("Jump");
         _anim.SetBool("IsGrounded", grounded);
+    }
+
+    public void TorchFliker()
+    {
+        torchLight.intensity = intensity * (1 - (torchTimer/duration)) + Random.Range(-0.3f, 0.3f);
     }
     
     public void Damaged(int amount)
@@ -160,6 +176,16 @@ public class Player : MonoBehaviour, Character {
 
     public void GettingCold(int amount)
     {
+        if (duration > torchTimer && amount > 0)
+            return;
+        else if(amount < 0)
+        {
+            bodyTemp -= amount;
+            bodyTemp = Mathf.Clamp(bodyTemp, 0, maxTemp);
+            acceleration = _oriAcc;
+            torchTimer = 0;
+            return;
+        }
         bodyTemp -= amount;
 
         bodyTemp = Mathf.Clamp(bodyTemp, 0, maxTemp);
@@ -189,6 +215,7 @@ public class Player : MonoBehaviour, Character {
        // Destroy("")
         //Game Over;
     }
+   
     
     //animation event function
     //this function should be called end of every attack motion

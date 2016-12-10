@@ -74,7 +74,8 @@ public class Monster : MonoBehaviour, Character {
 
     public void Attack()
     {
-        _player.SendMessage("Damaged", damage, SendMessageOptions.DontRequireReceiver);
+        if (range > Vector2.Distance(_transform.position, _player.transform.position))
+            _player.SendMessage("Damaged", damage, SendMessageOptions.DontRequireReceiver);
     }
 
     public void Suicide()
@@ -92,6 +93,7 @@ public class Monster : MonoBehaviour, Character {
     public void Death()
     {
         _anim.SetTrigger("Death");
+        
     }
 
     public void Disappear()
