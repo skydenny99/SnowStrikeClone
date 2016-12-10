@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour, Character {
-
+    
+    //body condition
     public int HP;
+    public int bodyTemp;
+    public int cold;
+    public int freezing;
+    public int freeze2death;
 
     //Horizontal movement
     public float acceleration;
@@ -22,7 +27,7 @@ public class Player : MonoBehaviour, Character {
     //Player Item
     //Equipment currentEquipment;
     //Equipment[] equipList;
-    //int currentIndex = 0;
+    int currentIndex = 0;
 
     //Animation Controller
     private Animator _anim;
@@ -57,9 +62,12 @@ public class Player : MonoBehaviour, Character {
             temp = Mathf.SmoothDamp(temp, 0, ref _vx, toZero);
         _rig.velocity = new Vector2(temp, _rig.velocity.y);
 
+        _anim.SetFloat("Speed", Mathf.Abs(axis));
+
         if(Input.GetKeyDown(KeyCode.UpArrow) && jumpAble)
         {
             _rig.velocity = new Vector2(_rig.velocity.x, jumpPower);
+            _anim.SetTrigger("Jump");
         }
     }
     
@@ -67,18 +75,22 @@ public class Player : MonoBehaviour, Character {
     {
         //장비 호출해서 공격
         //currentWeapon.Attack();
+        _anim.SetTrigger("Attack");
     }
 
     public void SwapWeapon()
     {
         //장비를 다음 것으로 전환
         //index를 1추가하여 다음것과 교체
-        
+        _anim.SetInteger("Index", currentIndex);
+        _anim.SetTrigger("Swap");
     }
 
     public void IsGrounded(bool grounded)
     {
         jumpAble = grounded;
+        _anim.ResetTrigger("Jump");
+        _anim.SetBool("IsGrounded", grounded);
     }
 
     public void Damaged(int amount)
@@ -86,8 +98,35 @@ public class Player : MonoBehaviour, Character {
         HP -= amount;
     }
 
-    public void PlayAnimation()
+    public void GettingCold(int amount)
     {
+        bodyTemp -= amount;
+        if (bodyTemp <= cold)
+        {
 
+        }
+        else if(bodyTemp <= freezing)
+        {
+
+        }
+        else if(bodyTemp <= freeze2death)
+        {
+
+        }
     }
+
+    //animation event function
+    //this function should be called end of every attack motion
+    public void resetAttack()
+    {
+        _anim.ResetTrigger("Attack");
+    }
+
+    //this function should be called end of every swap motion
+    public void resetSwap()
+    {
+        _anim.ResetTrigger("Swap");
+    }
+
+    
 }
