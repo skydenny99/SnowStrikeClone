@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-
     /*
      * 구현되어야 하는 기능
      * 
@@ -12,6 +11,8 @@ public class GameManager : MonoBehaviour {
      * 게임 종료
      * 
      */
+
+    public ItemManager itemManager;
 
 	// Use this for initialization
 	void Start () {
