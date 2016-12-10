@@ -8,10 +8,6 @@ public class Monster : MonoBehaviour, Character {
 
     //Horizontal movement
     public float acceleration;
-    public float maxSpeed;
-
-    public float toZero;
-    private float _vx;
     private Rigidbody2D _rig;
 
     //Attack
@@ -19,42 +15,86 @@ public class Monster : MonoBehaviour, Character {
     public int range;
 
     //Suicide
-    public int iceDamage;
+    public float explosiveRange;
+
+    private GameObject _player;
+    private GameObject _campFire;
+    private Transform _transform;
+
+    private Animator _anim;
 
     // Use this for initialization
-    void Start () {
-		
+    void Start ()
+    {
+        _transform = transform;
+        _rig = _transform.GetComponent<Rigidbody2D>();
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _campFire = GameObject.FindGameObjectWithTag("Camp Fire");
+        _anim = _transform.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        Vector2 pos = _player.transform.position;
+        if((pos.x-_transform.position.x)*_transform.localScale.x > 0)
+        {
+            if (range > Vector2.Distance(_transform.position, _player.transform.position))
+                Attack();
+            else
+                Move();
+        }
+        else
+            Move();
+
+
+        if (HP <= 0)
+            Death();
+
+        if (explosiveRange > Vector2.Distance(_transform.position, _campFire.transform.position))
+            Suicide();
+
+        if(_anim.IsInTransition(0)&& _anim.GetNextAnimatorStateInfo(0).nameHash == Animator.StringToHash("Base Layer.Exit"))
+        {
+            Disappear();
+        }
+        
+    }
 
     public void Move()
     {
-        float axis = transform.localScale.x;
-        Vector2 v = new Vector2(axis * acceleration, 0);
-        _rig.AddForce(v);
+        float axis = _transform.localScale.x;
+        Vector2 v = new Vector2(axis * acceleration * Time.deltaTime, 0);
 
-        float temp = Mathf.Clamp(_rig.velocity.x, -maxSpeed, maxSpeed);
-        temp = Mathf.SmoothDamp(temp, 0, ref _vx, toZero);
-        _rig.velocity = new Vector2(temp, _rig.velocity.y);
+        _anim.SetTrigger("Walk");
+        _transform.Translate(v);
+        
     }
 
     public void Attack()
     {
-     //   if()
+        _anim.SetTrigger("Attack");
+        _player.SendMessage("Damaged", damage, SendMessageOptions.DontRequireReceiver);
     }
 
     public void Suicide()
     {
+        _campFire.SendMessage("Damaged", damage, SendMessageOptions.DontRequireReceiver);
         //Instantiate(particle, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        _anim.SetTrigger("Suicide");
     }
 
     public void Damaged(int amount)
     {
         HP -= amount;
+    }
+
+    public void Death()
+    {
+        _anim.SetTrigger("Death");
+    }
+
+    public void Disappear()
+    {
+        Destroy(gameObject);
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CampFire : MonoBehaviour {
 
+    public int maxHP;
+    public int HP;
+
     public float minRange;
     public float cycle;
 
@@ -40,8 +43,15 @@ public class CampFire : MonoBehaviour {
         else
         {
             if(dist != 0)
-                _player.GettingCold(-(int)(1/dist));
+                _player.GettingCold(-(int)(minRange/dist));
             
         }
+    }
+
+    public void Damaged(int amount)
+    {
+        Debug.Log("앙 기모띠");
+        HP -= amount;
+        HP = Mathf.Clamp(HP, -10, maxHP);
     }
 }

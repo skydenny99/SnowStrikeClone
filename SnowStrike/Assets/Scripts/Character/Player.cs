@@ -70,7 +70,7 @@ public class Player : MonoBehaviour, Character {
         {
             transform.localScale = new Vector3(-scale.x, scale.y, scale.z);
         }
-        else
+        else if(axis < 0)
         {
             transform.localScale = scale;
         }
@@ -119,12 +119,17 @@ public class Player : MonoBehaviour, Character {
 
     public void SwapWeapon()
     {
-       // Debug.Log("Swaping Weapon");
-        if(currentIndex == equipmentList.Count-1)
+        // Debug.Log("Swaping Weapon");
+        /*if(currentIndex == equipmentList.Count-1)
             currentIndex = (currentIndex+1)%equipmentList.Count;
         else
             currentIndex++;
-        currentEquipment = equipmentList[currentIndex];
+        currentEquipment = equipmentList[currentIndex];*/
+
+        if (currentIndex == 1)
+            currentIndex = (currentIndex + 1) % 2;
+        else
+            currentIndex++;
         _anim.SetInteger("Index", currentIndex);
         _anim.SetTrigger("Swap");
     }
