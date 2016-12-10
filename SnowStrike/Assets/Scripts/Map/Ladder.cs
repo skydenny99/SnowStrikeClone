@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ladder : MonoBehaviour {
+    
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.CompareTag("Player"))
+        {
+            col.gameObject.SendMessage("CanClimb", true);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            col.gameObject.SendMessage("CanClimb", false);
+        }
+    }
 }

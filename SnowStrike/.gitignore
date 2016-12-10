@@ -28,3 +28,21 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+AnnotationManager
+AssetImportState
+AssetServerCacheV3
+AssetVersioning.db
+CurrentLayout.dwlt
+EditorUserBuildSettings.asset
+EditorUserSettings.asset
+FailedAssetImports.txt
+InspectorExpandedItems.asset
+MonoManager.asset
+ScriptAssemblies
+ScriptMapper
+UnityAssemblies
+assetDatabase3
+expandedItems
+guidmapper
+metadata

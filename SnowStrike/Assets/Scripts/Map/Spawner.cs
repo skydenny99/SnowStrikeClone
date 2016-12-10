@@ -33,7 +33,7 @@ public class Spawner : MonoBehaviour {
         }
 	}
 
-    public void Consume()
+    public void Take()
     {
         _timer = 0;
     }

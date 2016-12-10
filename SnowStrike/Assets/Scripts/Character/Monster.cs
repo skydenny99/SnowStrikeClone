@@ -12,7 +12,7 @@ public class Monster : MonoBehaviour, Character {
 
     //Attack
     public int damage;
-    public int range;
+    public float range;
 
     //Suicide
     public float explosiveRange;
@@ -36,7 +36,7 @@ public class Monster : MonoBehaviour, Character {
 	// Update is called once per frame
 	void Update () {
         Vector2 pos = _player.transform.position;
-        if((pos.x-_transform.position.x)*_transform.localScale.x > 0)
+        if((pos.x-_transform.position.x)*_transform.localScale.x < 0)
         {
             if (range > Vector2.Distance(_transform.position, _player.transform.position))
                 Attack();
@@ -52,17 +52,13 @@ public class Monster : MonoBehaviour, Character {
 
         if (explosiveRange > Vector2.Distance(_transform.position, _campFire.transform.position))
             Suicide();
-
-        if(_anim.IsInTransition(0)&& _anim.GetNextAnimatorStateInfo(0).nameHash == Animator.StringToHash("Base Layer.Exit"))
-        {
-            Disappear();
-        }
+        
         
     }
 
     public void Move()
     {
-        float axis = _transform.localScale.x;
+        float axis = -_transform.localScale.x;
         Vector2 v = new Vector2(axis * acceleration * Time.deltaTime, 0);
 
         _anim.SetTrigger("Walk");

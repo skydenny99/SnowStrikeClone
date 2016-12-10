@@ -26,6 +26,7 @@ public class Player : MonoBehaviour, Character {
     //Vertical movement
     public float jumpPower;
     public bool jumpAble = false;
+    public bool canClimb = false;
     
     //Player Item
     private List<Equipment> equipmentList = new List<Equipment>();
@@ -78,10 +79,19 @@ public class Player : MonoBehaviour, Character {
         _rig.transform.Translate(v);
         _anim.SetFloat("Speed", Mathf.Abs(axis));
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && jumpAble)
+        
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            _rig.velocity = new Vector2(_rig.velocity.x, jumpPower);
-            _anim.SetTrigger("Jump");
+            if(!canClimb&& jumpAble)
+            {
+                _rig.velocity = new Vector2(_rig.velocity.x, jumpPower);
+                _anim.SetTrigger("Jump");
+            }
+            else if(canClimb)
+            {
+                _rig.transform.Translate(new Vector2(0, jumpPower * Time.deltaTime));
+                _rig.velocity = new Vector2(_rig.velocity.x, 0);
+            }
         }
     }
 
@@ -233,5 +243,9 @@ public class Player : MonoBehaviour, Character {
 
             Destroy(collision.gameObject);*/
         }
+    }
+    public void CanClimb(bool can)
+    {
+        canClimb = can;
     }
 }
