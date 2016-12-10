@@ -17,23 +17,32 @@ public class Player : MonoBehaviour, Character {
     //Vertical movement
     public float jumpPower;
     public bool jumpAble = false;
-    
-    
+
+
     //Player Item
     //Equipment currentEquipment;
     //Equipment[] equipList;
     //int currentIndex = 0;
 
-    
+    //Animation Controller
+    private Animator _anim;
+
 
 	// Use this for initialization
 	void Start () {
         _rig = transform.GetComponent<Rigidbody2D>();
+        _anim = transform.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         Move();
+
+        if (Input.GetKeyDown(KeyCode.Z))
+            Attack();
+
+        if (Input.GetKeyDown(KeyCode.X))
+            SwapWeapon();
  
 	}
 
@@ -67,8 +76,18 @@ public class Player : MonoBehaviour, Character {
         
     }
 
-    public void isGrounded(bool grounded)
+    public void IsGrounded(bool grounded)
     {
         jumpAble = grounded;
+    }
+
+    public void Damaged(int amount)
+    {
+        HP -= amount;
+    }
+
+    public void PlayAnimation()
+    {
+
     }
 }
