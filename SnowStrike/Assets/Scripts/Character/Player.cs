@@ -207,7 +207,9 @@ public class Player : MonoBehaviour, Character {
                     break;
                 }
             }
-            
+
+            collision.transform.parent.gameObject.SendMessage("Consume");
+
             Destroy(collision.gameObject);
 
 

@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ItemPrefabsDB : MonoBehaviour {
 
-    public Transform[] items;
+    public GameObject[] items;
 
-    public void getItem(int id)
+    public GameObject getItem(int id)
     {
-        for(int i = 0; i< items.Length; i++)
-        {
-            items[i].GetComponent<Item>().
-        }
+        GameObject t = items[id];
+        return t;
     }
 }
