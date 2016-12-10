@@ -155,6 +155,7 @@ public class Player : MonoBehaviour, Character {
     {
         HP -= amount;
         HP = Mathf.Clamp(HP, -10, maxHP);
+        _anim.SetTrigger("Hurt");
     }
 
     public void GettingCold(int amount)
@@ -184,6 +185,8 @@ public class Player : MonoBehaviour, Character {
     }
     public void Death()
     {
+        _anim.SetTrigger("Death");
+       // Destroy("")
         //Game Over;
     }
     

@@ -13,6 +13,8 @@ public class Monster : MonoBehaviour, Character {
     //Attack
     public int damage;
     public float range;
+    public float delay;
+    private float attackTimer;
 
     //Suicide
     public float explosiveRange;
@@ -26,6 +28,7 @@ public class Monster : MonoBehaviour, Character {
     // Use this for initialization
     void Start ()
     {
+        attackTimer = delay;
         _transform = transform;
         _rig = _transform.GetComponent<Rigidbody2D>();
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -35,16 +38,19 @@ public class Monster : MonoBehaviour, Character {
 	
 	// Update is called once per frame
 	void Update () {
+        attackTimer += Time.deltaTime;
         Vector2 pos = _player.transform.position;
         if((pos.x-_transform.position.x)*_transform.localScale.x < 0)
         {
             if (range > Vector2.Distance(_transform.position, _player.transform.position))
-                Attack();
-            else
-                Move();
+                if(delay < attackTimer)
+                {
+                    attackTimer = 0;
+                    _anim.SetTrigger("Attack");
+                }
         }
-        else
-            Move();
+        if(!_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+         Move();
 
 
         if (HP <= 0)
@@ -68,7 +74,6 @@ public class Monster : MonoBehaviour, Character {
 
     public void Attack()
     {
-        _anim.SetTrigger("Attack");
         _player.SendMessage("Damaged", damage, SendMessageOptions.DontRequireReceiver);
     }
 
