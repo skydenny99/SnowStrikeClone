@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour, Character {
-    
+
     //body condition
+    public int maxHP;
     public int HP;
+    public int maxTemp;
     public int bodyTemp;
     public int cold;
     public int freezing;
@@ -13,7 +15,9 @@ public class Player : MonoBehaviour, Character {
 
     //Horizontal movement
     public float acceleration;
+    private float _oriAcc;
     public float maxSpeed;
+ //   public float maxSpeed;
 
     public float toZero;
     private float _vx;
@@ -25,19 +29,22 @@ public class Player : MonoBehaviour, Character {
     
     //Player Item
     private List<Equipment> equipmentList = new List<Equipment>();
-    
-    //Equipment currentEquipment;
-    //Equipment[] equipList;
+    private Equipment currentEquipment;
     int currentIndex = 0;
 
     //Animation Controller
     private Animator _anim;
+    private Vector3 scale;
 
 
     // Use this for initialization
     void Start() {
+        scale = transform.localScale;
         _rig = transform.GetComponent<Rigidbody2D>();
         _anim = transform.GetComponent<Animator>();
+        _oriAcc = acceleration;
+        //equipmentList.Add()
+        currentEquipment = equipmentList[0];
 	}
 	
 	// Update is called once per frame
@@ -49,6 +56,9 @@ public class Player : MonoBehaviour, Character {
 
         if (Input.GetKeyDown(KeyCode.X))
             SwapWeapon();
+
+        if (HP <= 0)
+            Death();
  
 	}
 
@@ -56,7 +66,15 @@ public class Player : MonoBehaviour, Character {
     {
         float axis = Input.GetAxis("Horizontal");
         Vector2 v = new Vector2(axis * acceleration * Time.deltaTime, 0);
-
+        if (axis > 0)
+        {
+            transform.localScale = new Vector3(-scale.x, scale.y, scale.z);
+        }
+        else
+        {
+            transform.localScale = scale;
+        }
+        
         _rig.transform.Translate(v);
         _anim.SetFloat("Speed", Mathf.Abs(axis));
 
@@ -101,8 +119,12 @@ public class Player : MonoBehaviour, Character {
 
     public void SwapWeapon()
     {
-        //장비를 다음 것으로 전환
-        //index를 1추가하여 다음것과 교체
+       // Debug.Log("Swaping Weapon");
+        if(currentIndex == equipmentList.Count-1)
+            currentIndex = (currentIndex+1)%equipmentList.Count;
+        else
+            currentIndex++;
+        currentEquipment = equipmentList[currentIndex];
         _anim.SetInteger("Index", currentIndex);
         _anim.SetTrigger("Swap");
     }
@@ -117,23 +139,37 @@ public class Player : MonoBehaviour, Character {
     public void Damaged(int amount)
     {
         HP -= amount;
+        HP = Mathf.Clamp(HP, -10, maxHP);
     }
 
     public void GettingCold(int amount)
     {
         bodyTemp -= amount;
-        if (bodyTemp <= cold)
-        {
 
-        }
-        else if(bodyTemp <= freezing)
+        bodyTemp = Mathf.Clamp(bodyTemp, 0, maxTemp);
+        
+        if (bodyTemp <= freeze2death)
         {
-
+            Death();
         }
-        else if(bodyTemp <= freeze2death)
+        else if (bodyTemp <= freezing)
         {
-
+            acceleration = _oriAcc * 0.5f;
+            Damaged(5);
         }
+        else if (bodyTemp <= cold)
+        {
+            acceleration = _oriAcc * 0.75f;
+            Damaged(3);
+        }
+        else
+        {
+            acceleration = _oriAcc;
+        }
+    }
+    public void Death()
+    {
+        //Game Over;
     }
     
     //animation event function

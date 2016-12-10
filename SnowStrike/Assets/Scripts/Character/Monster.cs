@@ -14,6 +14,13 @@ public class Monster : MonoBehaviour, Character {
     private float _vx;
     private Rigidbody2D _rig;
 
+    //Attack
+    public int damage;
+    public int range;
+
+    //Suicide
+    public int iceDamage;
+
     // Use this for initialization
     void Start () {
 		
@@ -37,7 +44,7 @@ public class Monster : MonoBehaviour, Character {
 
     public void Attack()
     {
-        
+     //   if()
     }
 
     public void Suicide()
