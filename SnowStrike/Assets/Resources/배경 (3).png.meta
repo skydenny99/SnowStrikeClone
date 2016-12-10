@@ -1,12 +1,9 @@
 fileFormatVersion: 2
-guid: 8d77b141be53e7e48a37f56b79ed25c4
-timeCreated: 1481358748
+guid: da1daf490bc42f4468751136c5f69ade
+timeCreated: 1481365909
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: IdleCannon_0
-    21300002: IdleCannon_1
-    21300004: IdleCannon_2
+  fileIDToRecycleName: {}
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -37,7 +34,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -69,48 +66,25 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: IdleCannon_0
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 69
-        width: 40
-        height: 56
-      alignment: 9
-      pivot: {x: 0.63544977, y: 0.4806501}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: IdleCannon_1
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 69
-        width: 40
-        height: 56
-      alignment: 9
-      pivot: {x: 0.62867737, y: 0.46130016}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: IdleCannon_2
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 5
-        width: 40
-        height: 55
-      alignment: 9
-      pivot: {x: 0.6083598, y: 0.4852237}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
+    sprites: []
     outline: []
   spritePackingTag: 
   userData: 

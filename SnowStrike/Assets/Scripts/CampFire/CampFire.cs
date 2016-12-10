@@ -38,7 +38,7 @@ public class CampFire : MonoBehaviour {
         float dist = Vector2.Distance(transform.position, _player.transform.position);
         if (minRange < dist)
         {
-            _player.GettingCold((int)(dist / 3));
+            _player.GettingCold((int)(dist / 2));
         }
         else
         {
@@ -50,7 +50,6 @@ public class CampFire : MonoBehaviour {
 
     public void Damaged(int amount)
     {
-        Debug.Log("앙 기모띠");
         HP -= amount;
         HP = Mathf.Clamp(HP, -10, maxHP);
     }
