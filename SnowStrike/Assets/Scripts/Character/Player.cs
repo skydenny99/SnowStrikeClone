@@ -37,8 +37,9 @@ public class Player : MonoBehaviour, Character {
     public bool canClimb = false;
     
     //Player Item
-    private List<Equipment> equipmentList = new List<Equipment>();
-    private Equipment currentEquipment;
+    private List<Weapon> weaponList = new List<Weapon>();
+    private Weapon currentWeapon;
+    public GameObject defaultWeapon;
     int currentIndex = 0;
 
     //Animation Controller
@@ -48,19 +49,22 @@ public class Player : MonoBehaviour, Character {
 
     // Use this for initialization
     void Start() {
+        weaponList.Add(defaultWeapon.GetComponent<Weapon>());
+        currentWeapon = weaponList[0];
+
         scale = transform.localScale;
         _rig = transform.GetComponent<Rigidbody2D>();
         _anim = transform.GetComponent<Animator>();
         _oriAcc = acceleration;
-        torchLight = transform.FindChild("Torch").GetComponent<Light>();
-        //equipmentList.Add()
-        currentEquipment = equipmentList[0];
+        //torchLight = transform.FindChild("Torch").GetComponent<Light>();
+        //weaponList.Add()
+        currentWeapon = weaponList[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
         torchTimer += Time.deltaTime;
-        MoveWithoutForce();
+        Move();
 
         if (Input.GetKeyDown(KeyCode.Z))
             _anim.SetTrigger("Attack");
@@ -74,7 +78,7 @@ public class Player : MonoBehaviour, Character {
         TorchFliker();
 	}
 
-    public void MoveWithoutForce()
+    public void Move()
     {
         float axis = Input.GetAxis("Horizontal");
         Vector2 v = new Vector2(axis * acceleration * Time.deltaTime, 0);
@@ -105,27 +109,7 @@ public class Player : MonoBehaviour, Character {
             }
         }
     }
-
-    public void Move()
-    {
-        float axis = Input.GetAxis("Horizontal");
-        Vector2 v = new Vector2(axis * acceleration, 0);
-        _rig.AddForce(v);
-
-        float temp = Mathf.Clamp(_rig.velocity.x, -maxSpeed, maxSpeed);
-        if (Mathf.Abs(axis) < 0.8)
-            temp = Mathf.SmoothDamp(temp, 0, ref _vx, toZero);
-        _rig.velocity = new Vector2(temp, _rig.velocity.y);
-        
-        _anim.SetFloat("Speed", Mathf.Abs(axis));
-
-        if(Input.GetKeyDown(KeyCode.UpArrow) && jumpAble)
-        {
-            _rig.velocity = new Vector2(_rig.velocity.x, jumpPower);
-            _anim.SetTrigger("Jump");
-        }
-    }
-
+    
     public bool isGrounded()
     {
         return false;
@@ -133,26 +117,21 @@ public class Player : MonoBehaviour, Character {
 
     public void Attack()
     {
-        //장비 호출해서 공격
-        //currentWeapon.Attack();
+        currentWeapon.Attack();
     }
 
     public void SwapWeapon()
     {
         // Debug.Log("Swaping Weapon");
-        /*if(currentIndex == equipmentList.Count-1)
-            currentIndex = (currentIndex+1)%equipmentList.Count;
+        if(currentIndex == weaponList.Count-1)
+            currentIndex = 0;
         else
             currentIndex++;
-        currentEquipment = equipmentList[currentIndex];*/
-
-        if (currentIndex == 1)
-            currentIndex = (currentIndex + 1) % 2;
-        else
-            currentIndex++;
-        _anim.SetInteger("Index", currentIndex);
+        currentWeapon = weaponList[currentIndex];
+        
+        _anim.SetInteger("Index", currentWeapon.getItemCode());
         _anim.SetTrigger("Swap");
-//        _anim.SetFloat("Attack Speed", currentEquipment.);
+//        _anim.SetFloat("Attack Speed", currentWeapon.);
     }
 
     public void IsGrounded(bool grounded)
@@ -164,7 +143,7 @@ public class Player : MonoBehaviour, Character {
 
     public void TorchFliker()
     {
-        torchLight.intensity = intensity * (1 - (torchTimer/duration)) + Random.Range(-0.3f, 0.3f);
+        //torchLight.intensity = intensity * (1 - (torchTimer/duration)) + Random.Range(-0.3f, 0.3f);
     }
     
     public void Damaged(int amount)
@@ -235,43 +214,22 @@ public class Player : MonoBehaviour, Character {
     {
         if(collision.CompareTag("Item"))
         {
-            Equipment item = collision.gameObject.GetComponent<Equipment>();
+            Weapon item = collision.gameObject.GetComponent<Weapon>();
             if (item == null)
                 return;
             
-            foreach(Equipment eq in equipmentList)
+            foreach(Weapon eq in weaponList)
             {
-                if(eq.itemcode == item.itemcode)
+                if(eq.getItemCode() == item.getItemCode())
                 {
-                    eq.level++;
+                    eq.setLevel(eq.getLevel() + 1);
                     break;
                 }
             }
 
-            collision.transform.parent.gameObject.SendMessage("Consume");
+            //collision.transform.parent.gameObject.SendMessage("Take");
 
             Destroy(collision.gameObject);
-
-
-            /*
-            Item item = collision.gameObject.GetComponent<Item>();
-            Debug.Assert(item != null);
-            
-            if (item is Ownable)
-            {
-
-                (item as Ownable).own();
-                // add to inventory;
-                // own code;
-            }
-            else if (item is Usable) 
-            {
-                // 가질 수 없다면 바로 써버린다
-                (item as Usable).use();
-                // use code;
-            }
-
-            Destroy(collision.gameObject);*/
         }
     }
     public void CanClimb(bool can)
