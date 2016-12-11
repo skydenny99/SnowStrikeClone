@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
     
 	// Use this for initialization
 	void Start () {
-        //ui = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIController>();
+        ui = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIController>();
         
         surviveTime = "생존 시간 : 0분 0초";
 	}

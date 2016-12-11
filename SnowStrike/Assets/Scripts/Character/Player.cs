@@ -170,11 +170,17 @@ public class Player : MonoBehaviour, Character {
     public void GettingCold(int amount)
     {
         if (duration > torchTimer && amount > 0)
+        {
+            HP++;
+            HP = Mathf.Clamp(HP, 0, maxHP);
             return;
+        }
         else if(amount < 0)
         {
+            HP += 2;
             bodyTemp -= amount;
             bodyTemp = Mathf.Clamp(bodyTemp, 0, maxTemp);
+            HP = Mathf.Clamp(HP, 0, maxHP);
             acceleration = _oriAcc;
             torchTimer = 0;
             return;

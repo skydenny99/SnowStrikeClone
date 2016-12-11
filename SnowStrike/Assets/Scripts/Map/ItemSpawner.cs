@@ -5,29 +5,33 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour {
 
     public ItemManager itemManager;
-    public Transform spawnPoint;
+    public Vector3 spawnPoint;
     public float respawnTime;
+    public float randomRange;
+    public bool isSpawned = false;
 
     private float _timer = 0;
 
 	// Use this for initialization
 	void Start () {
         _timer = respawnTime;
+        spawnPoint = transform.position;
         if(itemManager == null)
-            itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+            itemManager = GameObject.FindGameObjectWithTag("ItemManager").GetComponent<ItemManager>();
 	}
     
     void SpawnItem()
     {
         GameObject g = itemManager.getItem(Random.Range(0, itemManager.items.Length));
-        GameObject child = (GameObject)Instantiate(g, spawnPoint.transform.position, Quaternion.identity);
+        GameObject child = (GameObject)Instantiate(g, spawnPoint, Quaternion.identity);
         child.transform.parent = transform;
+        isSpawned = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
         _timer += Time.deltaTime;
-		if(_timer > respawnTime)
+		if(!isSpawned&&_timer > respawnTime + Random.Range(-randomRange, randomRange))
         {
             SpawnItem();
         }

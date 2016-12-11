@@ -29,8 +29,9 @@ public class CampFire : MonoBehaviour {
         {
             _timer = 0;
             CheckDist();
-
+            
         }
+        transform.position = new Vector3(transform.position.x, transform.position.y, (1-((float)HP / (float)maxHP)) * -1.25f);
 	}
 
     void CheckDist()

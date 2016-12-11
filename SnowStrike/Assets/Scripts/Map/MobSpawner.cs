@@ -25,8 +25,10 @@ public class MobSpawner : MonoBehaviour {
         {
             if (burstSpawnCycle < spawnTimer)
             {
-                if(mobQueue[index] != null)
+                if (mobQueue[index] != null)
                     BurstSpawnMob(mobQueue[index++]);
+                else
+                    index = 0;
 
             }
         }
@@ -36,7 +38,8 @@ public class MobSpawner : MonoBehaviour {
     {
         if (normalSpawnCycle + Random.Range(-variation, variation) < spawnTimer)
         {
-            Instantiate(monsterList[0], transform.position, Quaternion.identity);
+            int i = (int)Mathf.Round(Random.Range(0, 1));
+            Instantiate(monsterList[i], transform.position, Quaternion.identity);
             spawnTimer = 0;
         }
     }
