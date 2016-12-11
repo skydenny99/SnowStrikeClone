@@ -25,7 +25,7 @@ public class UIController : MonoBehaviour {
 
     public void ShowHP()
     {
-        transform.FindChild("Health").FindChild("Text").GetComponent<Text>().text = _player.HP.ToString();
+        //transform.FindChild("Health").FindChild("Text").GetComponent<Text>().text = _player.HP.ToString();
     }
 
     public void ShowTimer(float fakeTimer)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour {
 
-    public ItemPrefabsDB itemManager;
+    public ItemManager itemManager;
     public Transform spawnPoint;
     public float respawnTime;
 
@@ -14,7 +14,7 @@ public class ItemSpawner : MonoBehaviour {
 	void Start () {
         _timer = respawnTime;
         if(itemManager == null)
-            itemManager = GameObject.Find("Item Manager").GetComponent<ItemPrefabsDB>();
+            itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
 	}
     
     void SpawnItem()
