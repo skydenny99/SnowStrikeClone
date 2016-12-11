@@ -46,34 +46,44 @@ public class Player : MonoBehaviour, Character {
     private Animator _anim;
     private Vector3 scale;
 
+    //UI
+    public GameObject panel;
+    private UIController ui;
+
 
     // Use this for initialization
     void Start() {
-        weaponList.Add(defaultWeapon.GetComponent<Weapon>());
-        currentWeapon = weaponList[0];
-
         scale = transform.localScale;
         _rig = transform.GetComponent<Rigidbody2D>();
         _anim = transform.GetComponent<Animator>();
         _oriAcc = acceleration;
-        //torchLight = transform.FindChild("Torch").GetComponent<Light>();
         //weaponList.Add()
-        currentWeapon = weaponList[0];
-	}
+        torchLight = transform.FindChild("Torch").GetComponent<Light>();
+        ui = panel.GetComponent<UIController>();
+        if(defaultWeapon != null )
+        {
+            weaponList.Add(defaultWeapon.GetComponent<Weapon>());
+            currentWeapon = weaponList[0];
+        }
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
         torchTimer += Time.deltaTime;
-        Move();
+        if(HP > 0)
+        {
+            Move();
 
-        if (Input.GetKeyDown(KeyCode.Z))
-            _anim.SetTrigger("Attack");
+            if (Input.GetKeyDown(KeyCode.Z))
+                _anim.SetTrigger("Attack");
 
-        if (Input.GetKeyDown(KeyCode.X))
-            SwapWeapon();
-
-        if (HP <= 0)
-            Death();
+            if (Input.GetKeyDown(KeyCode.X))
+                SwapWeapon();
+        }
+        else
+            if(!GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().isOver)
+                Death();
 
         TorchFliker();
 	}
@@ -122,7 +132,6 @@ public class Player : MonoBehaviour, Character {
 
     public void SwapWeapon()
     {
-        // Debug.Log("Swaping Weapon");
         if(currentIndex == weaponList.Count-1)
             currentIndex = 0;
         else
@@ -130,8 +139,10 @@ public class Player : MonoBehaviour, Character {
         currentWeapon = weaponList[currentIndex];
         
         _anim.SetInteger("Index", currentWeapon.getItemCode());
+        ui.LevelUp(-1);
+        ui.SelectWeapon();
         _anim.SetTrigger("Swap");
-//        _anim.SetFloat("Attack Speed", currentWeapon.);
+      _anim.SetFloat("Attack Speed", weaponList[0].getAttackSpeed());
     }
 
     public void IsGrounded(bool grounded)
@@ -143,7 +154,7 @@ public class Player : MonoBehaviour, Character {
 
     public void TorchFliker()
     {
-        //torchLight.intensity = intensity * (1 - (torchTimer/duration)) + Random.Range(-0.3f, 0.3f);
+        torchLight.intensity = intensity * (1 - (torchTimer/duration)) + Random.Range(-0.3f, 0.3f);
     }
     
     public void Damaged(int amount)
@@ -190,9 +201,10 @@ public class Player : MonoBehaviour, Character {
     }
     public void Death()
     {
+        HP = 0;
         _anim.SetTrigger("Death");
-       // Destroy("")
-        //Game Over;
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GameOver();
+        
     }
    
     

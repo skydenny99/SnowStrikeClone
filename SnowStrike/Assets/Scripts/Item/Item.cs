@@ -7,4 +7,6 @@ public interface Item {
     int getItemCode();
     int getLevel();
     void setLevel(int level);
+    float getCaveSpawnRate();
+    float getForestSpawnRate();
 }

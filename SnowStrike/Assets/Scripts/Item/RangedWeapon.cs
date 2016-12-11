@@ -68,4 +68,9 @@ public class RangedWeapon : MonoBehaviour, Weapon {
     {
         return forestSpawnRate;
     }
+
+    public float getAttackSpeed()
+    {
+        return speed + (level - 1) * speedInc;
+    }
 }

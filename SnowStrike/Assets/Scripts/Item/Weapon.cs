@@ -5,6 +5,8 @@ using UnityEngine;
 
 public interface Weapon : Item {
     void Attack();
+
+    float getAttackSpeed();
     /*
     public int level = 1;
     public float range = 1;
