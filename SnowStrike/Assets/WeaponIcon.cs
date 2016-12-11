@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class WeaponIcon : MonoBehaviour {
 
     public Sprite basic;
+    public Weapon wp;
 
     void Start()
     {

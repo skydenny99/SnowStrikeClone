@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, Character {
     //Torch
     public int level = 1;
     public int duration = 10;
-    private float torchTimer;
+    public float torchTimer;
     private Light torchLight;
     private int intensity = 2;
 
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour, Character {
 	
 	// Update is called once per frame
 	void Update () {
-        torchTimer += Time.deltaTime;
+            torchTimer += Time.deltaTime;
         if(HP > 0)
         {
             Move();
@@ -139,7 +139,6 @@ public class Player : MonoBehaviour, Character {
         currentWeapon = weaponList[currentIndex];
         
         _anim.SetInteger("Index", currentWeapon.getItemCode());
-        ui.LevelUp(-1);
         ui.SelectWeapon();
         _anim.SetTrigger("Swap");
       _anim.SetFloat("Attack Speed", weaponList[0].getAttackSpeed());
@@ -161,7 +160,11 @@ public class Player : MonoBehaviour, Character {
     {
         HP -= amount;
         HP = Mathf.Clamp(HP, -10, maxHP);
-        _anim.SetTrigger("Hurt");
+        if (HP > 0)
+            _anim.SetTrigger("Hurt");
+        else
+            Death();
+        
     }
 
     public void GettingCold(int amount)
@@ -235,13 +238,17 @@ public class Player : MonoBehaviour, Character {
                 if(eq.getItemCode() == item.getItemCode())
                 {
                     eq.setLevel(eq.getLevel() + 1);
-                    break;
+                    ui.gameObject.SendMessage("LevelUp", eq);
+                    Destroy(collision.gameObject);
+                    return;
                 }
             }
 
+            weaponList.Add(item);
+            ui.gameObject.SendMessage("NewWeapon", collision.gameObject);
+            Destroy(collision.gameObject);
             //collision.transform.parent.gameObject.SendMessage("Take");
 
-            Destroy(collision.gameObject);
         }
     }
     public void CanClimb(bool can)

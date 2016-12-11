@@ -28,6 +28,9 @@ public class RangedWeapon : MonoBehaviour, Weapon {
         Vector2 direction = (player_.transform.localScale.x > 0 ? Vector2.left : Vector2.right);
         GameObject createdBullet = Instantiate(bullet, player_.transform.position + new Vector3(direction.x, direction.y, 1), Quaternion.identity);
         createdBullet.GetComponent<Rigidbody2D>().AddForce(direction * (range + (rangeInc * (level-1))));
+        createdBullet.transform.GetComponent<Explosive>().damage = damage + (level-1) * damageInc;
+        
+        DestroyObject(createdBullet, 5f);
     }
 
     public int getItemCode()
